@@ -78,7 +78,7 @@ export default (
 
     render() {
       if (!this.isLoaded()) {
-        return <LoadingIndicator {...this.state.props} />
+        return <LoadingIndicator />
       }
 
       return <ComposedComponent {...this.state.props} />
