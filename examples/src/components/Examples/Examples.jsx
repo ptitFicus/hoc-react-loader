@@ -18,7 +18,7 @@ const Examples = ({ style, className }) => (
       className={styles.example}
       link="Base"
       code="export&nbsp;default loader(Base)"
-      buttons={{ 0: true }}
+      buttons={{ 0: true, 3: true }}
       example={<Base />}
     >
       <div className={styles.doc}>

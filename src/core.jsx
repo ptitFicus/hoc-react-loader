@@ -24,6 +24,8 @@ export default (
     LoadingIndicator,
     wait = ['loaded'],
     load = undefined,
+    error = ['error'],
+    ErrorIndicator,
   } = {},
 ) => {
   const loadFunctionName = isString(load) ? load : 'load'
@@ -38,23 +40,25 @@ export default (
       props: {},
     }
 
-    isLoaded = () => {
-      // Wait is an array
+    isInState = (prop, propProcessor) => {
+      // Prop is an array
       // Implicitly meaning that this is an array of props
-      if (Array.isArray(wait)) {
-        return wait
-          .map(w => Boolean(this.props[w]))
-          .reduce((allProps, currentProp) => allProps && currentProp)
+      if (Array.isArray(prop)) {
+        const boolProps = prop.map(p => Boolean(this.props[p]))
+        return propProcessor(boolProps)
       }
 
-      // Wait is a function
-      if (isFunction(wait)) {
-        return wait(this.props, this.context)
+      // Prop is a function
+      if (isFunction(prop)) {
+        return prop(this.props, this.context)
       }
 
       // Anything else
-      return !wait
+      return !!prop
     }
+
+    isLoading = () => this.isInState(wait, boolProps => boolProps.includes(false))
+    isInError = () => this.isInState(error, boolProps => boolProps.includes(true))
 
     omitLoadInProps = (props) => {
       const isLoadAFunction = isFunction(props[loadFunctionName])
@@ -90,7 +94,9 @@ export default (
     }
 
     render() {
-      if (!this.isLoaded()) {
+      if (this.isInError()) {
+        return <ErrorIndicator {...this.state.props} />
+      } else if (this.isLoading()) {
         return <LoadingIndicator {...this.state.props} />
       }
 

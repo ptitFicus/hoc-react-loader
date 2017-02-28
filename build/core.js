@@ -50,7 +50,10 @@ exports.default = function (ComposedComponent) {
       _ref$wait = _ref.wait,
       wait = _ref$wait === undefined ? ['loaded'] : _ref$wait,
       _ref$load = _ref.load,
-      load = _ref$load === undefined ? undefined : _ref$load;
+      load = _ref$load === undefined ? undefined : _ref$load,
+      _ref$error = _ref.error,
+      error = _ref$error === undefined ? ['error'] : _ref$error,
+      ErrorIndicator = _ref.ErrorIndicator;
 
   var loadFunctionName = isString(load) ? load : 'load';
 
@@ -70,24 +73,28 @@ exports.default = function (ComposedComponent) {
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref2, [this].concat(args))), _this), _this.state = {
         props: {}
-      }, _this.isLoaded = function () {
-        // Wait is an array
+      }, _this.isInState = function (prop) {
+        // Prop is an array
         // Implicitly meaning that this is an array of props
-        if (Array.isArray(wait)) {
-          return wait.map(function (w) {
-            return Boolean(_this.props[w]);
+        if (Array.isArray(prop)) {
+          return prop.map(function (p) {
+            return Boolean(_this.props[p]);
           }).reduce(function (allProps, currentProp) {
             return allProps && currentProp;
           });
         }
 
-        // Wait is a function
-        if (isFunction(wait)) {
-          return wait(_this.props, _this.context);
+        // Prop is a function
+        if (isFunction(prop)) {
+          return prop(_this.props, _this.context);
         }
 
         // Anything else
-        return !wait;
+        return !prop;
+      }, _this.isLoaded = function () {
+        return _this.isInState(wait);
+      }, _this.isInError = function () {
+        return _this.isInState(error);
       }, _this.omitLoadInProps = function (props) {
         var isLoadAFunction = isFunction(props[loadFunctionName]);
 
@@ -121,7 +128,10 @@ exports.default = function (ComposedComponent) {
     }, {
       key: 'render',
       value: function render() {
-        if (!this.isLoaded()) {
+        console.log('isInError ? ', this.isInError());
+        if (this.isInError()) {
+          return _react2.default.createElement(ErrorIndicator, this.state.props);
+        } else if (!this.isLoaded()) {
           return _react2.default.createElement(LoadingIndicator, this.state.props);
         }
 
