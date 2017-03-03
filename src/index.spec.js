@@ -65,6 +65,11 @@ const isNotInError = (loaded, CustomErrorComponent) => {
   expect(loaded.find(CustomErrorComponent || ErrorCross).node).to.be.undefined
 }
 
+const isInErrorCustomErrorComponent = Comp => {
+  isInError(Comp, ErrorComponent)
+  expect(Comp.find(ErrorCross).node).to.be.undefined
+}
+
 const isLoadedCustomLoader = (load, loaded) => {
   // Load function is not called twice
   // Graphic component is called
@@ -237,11 +242,16 @@ describe('react-loader', () => {
   })
 
   it('should print a different error component', () => {
+    // Mount
+    const loaded = getWrapped({ ErrorIndicator: ErrorComponent, error: true })
 
+    isInErrorCustomErrorComponent(loaded)
   })
 
   it('should prioritize error state over loaded state', () => {
+    const loaded = getWrapped({ error: true, wait: false })
 
+    isInError(loaded)
   })
 })
 
