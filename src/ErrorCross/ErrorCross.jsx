@@ -12,10 +12,11 @@ const Cross = ({ message, className, style }) => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          stroke="#F00"
-          strokeWidth="8"
+          stroke="#ff0000"
+          strokeWidth="3.03754568"
           strokeLinecap="round"
-          d="m14,14 92,92m0-92-92,92"
+          id="path3728"
+          d="M 1.5341128,1.5341128 36.465887,36.465887 m 0,-34.9317742 L 1.5341128,36.465887"
         />
       </svg>
     </div>

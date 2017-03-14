@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _ErrorCross = require('./ErrorCross.jsx');
+var _ErrorCross = require('./ErrorCross');
 
 var _ErrorCross2 = _interopRequireDefault(_ErrorCross);
 

@@ -1,1 +1,1 @@
-export default from './ErrorCross.jsx'
+export default from './ErrorCross'
