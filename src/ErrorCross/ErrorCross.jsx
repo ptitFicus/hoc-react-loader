@@ -1,26 +1,69 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
+import tinycolor from 'tinycolor2'
 
-const Cross = ({ message, className, style }) => {
-  return (
-    <div title={message}>
-      <svg
-        height="38"
-        width="38"
-        viewBox="0 0 38 38"
-        className={className}
-        style={style}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          stroke="#ff0000"
-          strokeWidth="3.03754568"
-          strokeLinecap="round"
-          id="path3728"
-          d="M 1.5341128,1.5341128 36.465887,36.465887 m 0,-34.9317742 L 1.5341128,36.465887"
-        />
-      </svg>
-    </div>
-  )
+/* global window */
+const getBackgroundColor = (node) => {
+  return window.getComputedStyle(node, null).getPropertyValue('background-color')
+}
+
+
+class Cross extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      color: '#cecece',
+    }
+  }
+
+  componentDidMount() {
+    this.setColor()
+  }
+
+  setColor = () => {
+    let parent = this.svg && this.svg.parentNode
+    let parentColor = parent ? getBackgroundColor(parent) : undefined
+
+    while (parent && !parentColor) {
+      parent = parent.parentNode
+      if (parent) parentColor = getBackgroundColor(parent)
+    }
+
+    if (parentColor) {
+      const tinyC = tinycolor(parentColor)
+      const color = tinyC.isDark() ? tinyC.lighten(20) : tinyC.darken(20)
+
+      this.setState({
+        color: color.toHexString(),
+      })
+    }
+  }
+
+  render() {
+    const { color } = this.state
+    const { style, className, message } = this.props
+
+    return (
+      <div title={message}>
+        <svg
+          height="38"
+          width="38"
+          viewBox="0 0 38 38"
+          className={className}
+          style={style}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke={color}
+            strokeWidth="3.03754568"
+            strokeLinecap="round"
+            id="path3728"
+            d="M 1.5341128,1.5341128 36.465887,36.465887 m 0,-34.9317742 L 1.5341128,36.465887"
+          />
+        </svg>
+      </div>
+    )
+  }
 }
 
 const { string } = PropTypes
