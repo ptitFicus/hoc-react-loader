@@ -21,7 +21,7 @@ class Cross extends Component {
   }
 
   setColor = () => {
-    let parent = this.svg && this.svg.parentNode
+    let parent = this.div && this.div.parentNode
     let parentColor = parent ? getBackgroundColor(parent) : undefined
 
     while (parent && !parentColor) {
@@ -44,7 +44,10 @@ class Cross extends Component {
     const { style, className, message } = this.props
 
     return (
-      <div title={message}>
+      <div
+        title={message}
+        ref={(c) => { this.div = c }}
+      >
         <svg
           height="38"
           width="38"
